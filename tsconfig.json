@@ -1,38 +1,71 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "lib": ["ES2020"],
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
     "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/types/*": ["src/types/*"],
+      "@/utils/*": ["src/utils/*"],
+      "@/config/*": ["src/config/*"]
+    },
+
+    // Type Checking
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "declaration": true,
-    "declarationDir": "./types",
-    "sourceMap": true,
-    "removeComments": false,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "noImplicitOverride": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "exactOptionalPropertyTypes": true,
-    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
     "noPropertyAccessFromIndexSignature": false,
-    "noUncheckedIndexedAccess": true
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+
+    // Modules
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+
+    // Emit
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./types",
+    "sourceMap": true,
+    "inlineSources": true,
+    "removeComments": false,
+    "importHelpers": true,
+    "newLine": "lf",
+
+    // Interop Constraints
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+
+    // Language and Environment
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": true
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*", "types/**/*", "*.config.*"],
   "exclude": [
     "node_modules",
     "dist",
-    "types",
+    "build",
+    "coverage",
     "**/*.test.ts",
-    "**/*.spec.ts"
-  ]
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }
