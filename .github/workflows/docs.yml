@@ -39,11 +39,11 @@ jobs:
           # Create docs output directory
           mkdir -p dist/docs
           
-          # Install redoc-cli as a dev dependency and use npx
-          npm install --save-dev redoc-cli@2.1.0
+          # Install @redocly/cli which includes redoc functionality
+          npm install -g @redocly/cli
           
-          # Build ReDoc HTML from OpenAPI spec using npx
-          npx redoc-cli build docs/openapi.yaml --output dist/docs/index.html --theme.colors.primary.main=#2563eb
+          # Build ReDoc HTML from OpenAPI spec
+          npx @redocly/cli build-docs docs/openapi.yaml --output dist/docs/index.html
           
           # Copy OpenAPI spec for direct access
           cp docs/openapi.yaml dist/docs/
