@@ -1,0 +1,276 @@
+openapi: 3.0.3
+info:
+  title: Airtable MCP Server API
+  description: |
+    Advanced AI-powered Airtable MCP server with TypeScript support, intelligent analytics, 
+    predictive modeling, and enterprise automation capabilities.
+
+    This API provides Model Context Protocol (MCP) endpoints for seamless integration
+    with Claude AI and other AI systems for Airtable operations.
+  version: 3.1.0
+  contact:
+    name: API Support
+    url: https://github.com/kat-bell/airtable-mcp
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8010
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /mcp:
+    post:
+      summary: MCP Protocol Endpoint
+      description: Main endpoint for Model Context Protocol communication
+      operationId: handleMCPRequest
+      tags:
+        - MCP Protocol
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MCPRequest'
+            examples:
+              listResources:
+                summary: List available resources
+                value:
+                  jsonrpc: '2.0'
+                  id: 1
+                  method: 'resources/list'
+                  params: {}
+              listTools:
+                summary: List available tools
+                value:
+                  jsonrpc: '2.0'
+                  id: 2
+                  method: 'tools/list'
+                  params: {}
+      responses:
+        '200':
+          description: Successful MCP response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPResponse'
+        '400':
+          description: Bad request - Invalid MCP protocol format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /health:
+    get:
+      summary: Health Check
+      description: Check the health status of the MCP server
+      operationId: healthCheck
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'healthy'
+                  timestamp:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                    example: '3.1.0'
+                  uptime:
+                    type: number
+                    description: Server uptime in seconds
+        '503':
+          description: Server is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /metrics:
+    get:
+      summary: Server Metrics
+      description: Get server performance and usage metrics
+      operationId: getMetrics
+      tags:
+        - Monitoring
+      responses:
+        '200':
+          description: Server metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requests_total:
+                    type: number
+                  requests_per_second:
+                    type: number
+                  response_time_avg:
+                    type: number
+                  memory_usage:
+                    type: object
+                    properties:
+                      rss:
+                        type: number
+                      heapUsed:
+                        type: number
+                      heapTotal:
+                        type: number
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Airtable Personal Access Token
+      description: |
+        Airtable Personal Access Token starting with 'pat'
+
+        Example: patBuwfwIpskJ7AiS.6a03cc1b3525d5aba66104b4ed9bf2641edf0be11e2c6c7d2a27a0c91a93d31b
+
+  schemas:
+    MCPRequest:
+      type: object
+      required:
+        - jsonrpc
+        - id
+        - method
+      properties:
+        jsonrpc:
+          type: string
+          enum: ['2.0']
+          description: JSON-RPC version
+        id:
+          oneOf:
+            - type: string
+            - type: number
+          description: Request identifier
+        method:
+          type: string
+          description: MCP method name
+          examples:
+            - 'resources/list'
+            - 'resources/read'
+            - 'tools/list'
+            - 'tools/call'
+        params:
+          type: object
+          description: Method-specific parameters
+
+    MCPResponse:
+      type: object
+      required:
+        - jsonrpc
+        - id
+      properties:
+        jsonrpc:
+          type: string
+          enum: ['2.0']
+        id:
+          oneOf:
+            - type: string
+            - type: number
+        result:
+          type: object
+          description: Method result (present on success)
+        error:
+          type: object
+          description: Error object (present on failure)
+          properties:
+            code:
+              type: number
+            message:
+              type: string
+            data:
+              type: object
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        code:
+          type: number
+          description: HTTP status code
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+
+    AirtableRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: '^rec[a-zA-Z0-9]{14}$'
+          description: Airtable record ID
+        fields:
+          type: object
+          additionalProperties: true
+          description: Record field values
+        createdTime:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+
+    AirtableBase:
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: '^app[a-zA-Z0-9]{14}$'
+          description: Airtable base ID
+        name:
+          type: string
+          description: Base name
+        permissionLevel:
+          type: string
+          enum: ['none', 'read', 'comment', 'edit', 'create']
+          description: User's permission level for the base
+
+tags:
+  - name: MCP Protocol
+    description: Model Context Protocol endpoints
+  - name: Health
+    description: Health and status endpoints
+  - name: Monitoring
+    description: Metrics and monitoring endpoints
+
+externalDocs:
+  description: Full API Documentation
+  url: https://github.com/kat-bell/airtable-mcp/blob/main/README.md
