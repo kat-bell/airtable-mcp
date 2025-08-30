@@ -154,7 +154,7 @@ components:
       description: |
         Airtable Personal Access Token starting with 'pat'
 
-        Example: ***REMOVED_TOKEN***
+        Example: patXXXXXXXXXXXXX.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
   schemas:
     MCPRequest:
