@@ -69,7 +69,7 @@
   "dependencies": {
     "@smithery/cli": "^1.0.0",
     "airtable": "^0.12.2",
-    "dotenv": "^16.0.0"
+    "dotenv": "^17.2.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.6",
