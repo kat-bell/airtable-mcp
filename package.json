@@ -78,7 +78,7 @@
     "@semantic-release/git": "^10.0.1",
     "@types/dotenv": "^8.2.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.4.0",
+    "@types/node": "^25.0.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.41.0",
