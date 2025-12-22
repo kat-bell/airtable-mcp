@@ -67,7 +67,7 @@
   "author": "Rashid Azarang",
   "license": "MIT",
   "dependencies": {
-    "@smithery/cli": "^1.0.0",
+    "@smithery/cli": "^2.0.0",
     "airtable": "^0.12.2",
     "dotenv": "^17.2.2"
   },
